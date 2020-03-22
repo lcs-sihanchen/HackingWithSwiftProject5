@@ -13,6 +13,7 @@
 		9C769FA42428030100584E9C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C769FA22428030100584E9C /* Main.storyboard */; };
 		9C769FA62428030900584E9C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9C769FA52428030900584E9C /* Assets.xcassets */; };
 		9C769FA92428030900584E9C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9C769FA72428030900584E9C /* LaunchScreen.storyboard */; };
+		9C769FB12428092300584E9C /* start.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9C769FB02428092300584E9C /* start.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		9C769FA52428030900584E9C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9C769FA82428030900584E9C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9C769FAA2428030900584E9C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9C769FB02428092300584E9C /* start.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = start.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 				9C769F9E2428030100584E9C /* SceneDelegate.swift */,
 				9C769FA02428030100584E9C /* ViewController.swift */,
 				9C769FA22428030100584E9C /* Main.storyboard */,
+				9C769FB02428092300584E9C /* start.txt */,
 				9C769FA52428030900584E9C /* Assets.xcassets */,
 				9C769FA72428030900584E9C /* LaunchScreen.storyboard */,
 				9C769FAA2428030900584E9C /* Info.plist */,
@@ -126,6 +129,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C769FA92428030900584E9C /* LaunchScreen.storyboard in Resources */,
+				9C769FB12428092300584E9C /* start.txt in Resources */,
 				9C769FA62428030900584E9C /* Assets.xcassets in Resources */,
 				9C769FA42428030100584E9C /* Main.storyboard in Resources */,
 			);
