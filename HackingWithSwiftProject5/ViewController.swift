@@ -40,10 +40,35 @@ class ViewController: UITableViewController {
             }
             
             startGame()
-            
+            // an add button on top right invoking promptForAnswer Function
+            navigationItem.rightBarButtonItem =
+            UIBarButtonItem(barButtonSystemItem: .add, target: self,
+            action: #selector(promptForAnswer))
         }
     }
     
+    @objc func promptForAnswer() {
+       let ac = UIAlertController(title: "Enter answer", message:
+    nil, preferredStyle: .alert)
+       ac.addTextField()
+    // action in : let the code that is executed accept a parameter of UIAction
+    // weak: don't want strong references, two ways to resolve: 1 is unowned, 2 is weak. unown is like force unwrapped while weak is possibly a nil
+    
+    // Weak self weak ac means they can never form a strong reference cycle (who owns who)
+    
+    // Trailing closure syntax
+       let submitAction = UIAlertAction(title: "Submit",
+    style: .default) { [weak self, weak ac] action in
+        
+          guard let answer = ac?.textFields?[0].text else {
+            return
+        }
+        
+          self?.submit(answer)
+       }
+       ac.addAction(submitAction)
+       present(ac, animated: true)
+    }
     
     func startGame() {
         title = allWords.randomElement()
@@ -71,6 +96,7 @@ class ViewController: UITableViewController {
         return cell
     }
     
-    
+    func submit(_ answer: String) {
+    }
 }
 
