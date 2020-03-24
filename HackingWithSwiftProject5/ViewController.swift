@@ -42,32 +42,32 @@ class ViewController: UITableViewController {
             startGame()
             // an add button on top right invoking promptForAnswer Function
             navigationItem.rightBarButtonItem =
-            UIBarButtonItem(barButtonSystemItem: .add, target: self,
-            action: #selector(promptForAnswer))
+                UIBarButtonItem(barButtonSystemItem: .add, target: self,
+                                action: #selector(promptForAnswer))
         }
     }
     
     @objc func promptForAnswer() {
-       let ac = UIAlertController(title: "Enter answer", message:
-    nil, preferredStyle: .alert)
-       ac.addTextField()
-    // action in : let the code that is executed accept a parameter of UIAction
-    // weak: don't want strong references, two ways to resolve: 1 is unowned, 2 is weak. unown is like force unwrapped while weak is possibly a nil
-    
-    // Weak self weak ac means they can never form a strong reference cycle (who owns who)
-    
-    // Trailing closure syntax
-       let submitAction = UIAlertAction(title: "Submit",
-    style: .default) { [weak self, weak ac] action in
+        let ac = UIAlertController(title: "Enter answer", message:
+            nil, preferredStyle: .alert)
+        ac.addTextField()
+        // action in : let the code that is executed accept a parameter of UIAction
+        // weak: don't want strong references, two ways to resolve: 1 is unowned, 2 is weak. unown is like force unwrapped while weak is possibly a nil
         
-          guard let answer = ac?.textFields?[0].text else {
-            return
+        // Weak self weak ac means they can never form a strong reference cycle (who owns who)
+        
+        // Trailing closure syntax
+        let submitAction = UIAlertAction(title: "Submit",
+                                         style: .default) { [weak self, weak ac] action in
+                                            
+                                            guard let answer = ac?.textFields?[0].text else {
+                                                return
+                                            }
+                                            
+                                            self?.submit(answer)
         }
-        
-          self?.submit(answer)
-       }
-       ac.addAction(submitAction)
-       present(ac, animated: true)
+        ac.addAction(submitAction)
+        present(ac, animated: true)
     }
     
     func startGame() {
@@ -96,7 +96,85 @@ class ViewController: UITableViewController {
         return cell
     }
     
+    func isPossible(word: String) -> Bool {
+        // ! means the opposite, in this case it's false because we don't want players to write a word again
+        return !usedWords.contains(word)
+    }
+    
+    // This method is used to check if the letter in our answer actually exists in the original word
+    func isOriginal(word: String) -> Bool {
+        // title is the word we are playing with
+        guard var tempWord = title?.lowercased() else {
+            return false
+        }
+        
+        for letter in word {
+            // first index : the first time a value appears in the array
+            if let position = tempWord.firstIndex(of: letter){
+                tempWord.remove(at: position)
+                // if it didn't find the first index of the letter which means the word user creates is not part of the original word
+            } else {
+                return false
+            }
+        }
+        
+        return true
+    }
+    
+    
+    func isReal(word: String) -> Bool {
+        // UITextChecker is a tool to check if the users spell things correctly
+        let checker = UITextChecker()
+        // Range is the whole word, starting from 0 to itself
+        // Using Unicode Transformation Format (16-bit) because this code will consider emoji a 2-letter string while uikit consider it as 1. Suggestion is that use utf16 when working with UIKit, SpriteKit or any other Apple Framework.
+        
+        let range = NSRange(location: 0, length: word.utf16.count)
+        // Parameter #4 asks to start at the beginning of the range if no spelling error is found
+        // This command returns where the error is found, if there isn't an error, it will return NSNotFound
+        let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
+        
+        // NSNotFound tells us the spelling is correct
+        return misspelledRange.location == NSNotFound
+    }
+    
+    
+    
     func submit(_ answer: String) {
+        let lowerAnswer = answer.lowercased()
+        
+        let errorTitle: String
+        let errorMessage: String
+        
+        if isPossible(word: lowerAnswer) {
+            if isOriginal(word: lowerAnswer) {
+                if  lowerAnswer.count < 3 {
+                    errorTitle = "Not long enough"
+                    errorMessage = ""
+                    
+                } else if isReal(word: lowerAnswer){
+                    usedWords.insert(answer, at: 0)
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    tableView.insertRows(at: [indexPath],
+                                         with: .automatic)
+                    return
+                } else {
+                    errorTitle = "Word not recognised"
+                    errorMessage = "You can't just make them up, you know!"
+                }
+            } else {
+                errorTitle = "Word used already"
+                errorMessage = "Be more original!"
+            }
+        } else {
+            guard let title = title?.lowercased() else { return }
+            errorTitle = "Word not possible"
+            errorMessage = "You can't spell that word from \(title)"
+        }
+        let ac = UIAlertController(title: errorTitle, message:
+            errorMessage, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
 }
+
 
