@@ -44,6 +44,8 @@ class ViewController: UITableViewController {
             navigationItem.rightBarButtonItem =
                 UIBarButtonItem(barButtonSystemItem: .add, target: self,
                                 action: #selector(promptForAnswer))
+            
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Restart", style: .plain, target: self, action: #selector(startGame))
         }
     }
     
@@ -70,7 +72,7 @@ class ViewController: UITableViewController {
         present(ac, animated: true)
     }
     
-    func startGame() {
+    @objc func startGame() {
         title = allWords.randomElement()
         
         // Keep Capacity is very efficient when you are trying to grow the collection again
@@ -155,10 +157,13 @@ class ViewController: UITableViewController {
         if isPossible(word: lowerAnswer) {
             if isOriginal(word: lowerAnswer) {
                 // Not the same word
-                if  lowerAnswer == title {
+                if lowerAnswer == "" {
+                    showErrorMessage(errorTitle: "It's empty", errorMessage: "Hey, type something!")
+                }
+                else  if  lowerAnswer == title {
                     showErrorMessage(errorTitle: "It's the same", errorMessage: "Try to make a new word!")
                     
-                // Minimum of 3 letters in the word
+                    // Minimum of 3 letters in the word
                 } else  if lowerAnswer.count < 3 {
                     showErrorMessage(errorTitle: "Not long enough", errorMessage: "The word should have more than 2 letters.")
                     
@@ -181,11 +186,11 @@ class ViewController: UITableViewController {
             }
             
             showErrorMessage(errorTitle: "Word not possible", errorMessage: "You can't spell that word from \(title).")
-           
+            
         }
         
         
-       
+        
     }
 }
 
