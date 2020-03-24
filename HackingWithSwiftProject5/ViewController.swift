@@ -145,11 +145,17 @@ class ViewController: UITableViewController {
         let errorTitle: String
         let errorMessage: String
         
+        // Triple if because we need to pass 3 tests before the answers become valid
         if isPossible(word: lowerAnswer) {
             if isOriginal(word: lowerAnswer) {
-                if  lowerAnswer.count < 3 {
+                // Not the same word
+                if  lowerAnswer == title {
+                    errorTitle = "It's the same"
+                    errorMessage = "Try to make a new word!"
+                // Minimum of 3 letters in the word
+                } else  if lowerAnswer.count < 3 {
                     errorTitle = "Not long enough"
-                    errorMessage = ""
+                    errorMessage = "The word should have more than 2 letters."
                     
                 } else if isReal(word: lowerAnswer){
                     usedWords.insert(answer, at: 0)
@@ -168,8 +174,10 @@ class ViewController: UITableViewController {
         } else {
             guard let title = title?.lowercased() else { return }
             errorTitle = "Word not possible"
-            errorMessage = "You can't spell that word from \(title)"
+            errorMessage = "You can't spell that word from \(title)."
         }
+        
+        // An alert will show up when you put a wrong answer
         let ac = UIAlertController(title: errorTitle, message:
             errorMessage, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
